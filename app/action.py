@@ -20,7 +20,7 @@ class Action:
     def format_url(self, path) -> str:
         return f'https://{self.host}/{path}'
 
-    def login(self) -> dict:
+    def login(self):
         login_url = self.format_url('auth/login')
         res = self.session.get(login_url)
         csrf_token = BeautifulSoup(res.text, "html.parser").find("input", attrs={"name": "csrf_token"})["value"]
@@ -31,7 +31,7 @@ class Action:
             "csrf_token": csrf_token
         }
         return self.session.post(login_url, data=form_data,
-                                 timeout=self.timeout, verify=False).json()
+                                 timeout=self.timeout, verify=False)
 
     def check_in(self) -> dict:
         check_in_url = self.format_url('user/checkin')

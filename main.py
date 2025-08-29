@@ -34,6 +34,8 @@ try:
         try:
             # 登录
             res = action.login()
+            print(res.text)
+            res = res.json()
             if res['ret'] != 1:
                 log.set_failed(f'CordCloud 帐号登录失败，错误信息：{res["msg"]}')
             log.info(f'尝试帐号登录，结果：{res["msg"]}')
