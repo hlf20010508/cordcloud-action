@@ -3,6 +3,7 @@ from typing import Tuple
 
 import requests
 import urllib3
+from bs4 import BeautifulSoup
 
 urllib3.disable_warnings()
 
@@ -21,10 +22,13 @@ class Action:
 
     def login(self) -> dict:
         login_url = self.format_url('auth/login')
+        res = self.session.get(login_url)
+        csrf_token = BeautifulSoup(res.text, "html.parser").find("input", attrs={"name": "csrf_token"})["value"]
         form_data = {
             'email': self.email,
             'passwd': self.passwd,
-            'code': self.code
+            'code': self.code,
+            "csrf_token": csrf_token
         }
         return self.session.post(login_url, data=form_data,
                                  timeout=self.timeout, verify=False).json()
